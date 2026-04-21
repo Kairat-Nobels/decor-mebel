@@ -1,0 +1,82 @@
+@import 'rsuite/dist/rsuite.min.css';
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 20px 0 30px;
+}
+
+.navbar {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  margin-bottom: 20px;
+}
+
+.navbar ul {
+  list-style-type: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 30px;
+}
+
+.navbar a {
+  padding: 8px 30px;
+  color: #78909c;
+  background-color: transparent;
+  border: 2px solid#78909c;
+  font-size: 15px;
+  font-weight: 600;
+  width: fit-content;
+  text-decoration: none;
+  font-size: 18px;
+  line-height: 22px;
+  position: relative;
+}
+
+.navbar a:hover {
+  font-weight: 600;
+  text-decoration: none;
+  color: white;
+  color: #78909c;
+}
+
+.navbar .active {
+  font-size: 20px;
+  font-weight: 600;
+  color: #ffffff;
+  position: relative;
+  background: #78909c;
+  border-radius: 5px;
+  text-decoration: none;
+}
+
+.navbar a:hover::after {
+  position: absolute;
+  top: 30px;
+  content: '';
+  height: 3px;
+  border-radius: 5px;
+  left: 10%;
+  width: 80%;
+  background: #78909c;
+}
+
+.navbar .active:hover {
+  transform: none;
+  background: #78909c;
+  border-radius: 10px;
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.navbar .active:hover::after {
+  display: none;
+}
+
+.content {
+  margin-bottom: 20px;
+  padding-bottom: 40px;
+}
