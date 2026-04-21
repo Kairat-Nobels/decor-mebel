@@ -1,44 +1,63 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { decrementQuantity, incrementQuantity, removeItem } from '../../../../store/features/cartSlice';
-import { IoIosCloseCircleOutline } from "react-icons/io";
+import {
+    decrementQuantity,
+    incrementQuantity,
+    removeItem,
+} from '../../../../store/features/cartSlice';
+import { IoIosCloseCircleOutline } from 'react-icons/io';
+import './cartItem.scss';
 
+const CartItem = ({ image, title, price, quantity, category, item }) => {
+    const dispatch = useDispatch();
 
-const CartItem = (props) => {
-    const { image, title, price, quantity, category, item } = props;
-    const dispatch = useDispatch()
     return (
-        <div className="row mb-4 d-flex justify-content-around align-items-center">
-            <div className="col-md-2 col-lg-2 col-xl-2">
-                <img
-                    src={image}
-                    className="img-fluid rounded-3" alt="Cotton T-shirt" />
+        <article className="cart-item-card">
+            <div className="cart-item-card__image">
+                <img src={image} alt={title} />
             </div>
-            <div className="col-md-3 col-lg-3 col-xl-3">
-                <h6 className="text-muted">{category}</h6>
-                <h6 className="text-black mb-0">{title}</h6>
-            </div>
-            <div className="col-md-3 col-lg-3 col-xl-2 d-flex align-items-center">
-                <button className="quantity-button px-2"
-                    onClick={() => dispatch(decrementQuantity(item.id))}>
-                    -
-                </button>
 
-                <span className='px-2'>{quantity}</span>
+            <div className="cart-item-card__content">
+                <div className="cart-item-card__info">
+                    <span className="cart-item-card__category">{category}</span>
+                    <h3 className="cart-item-card__title">{title}</h3>
+                </div>
 
-                <button className="px-2 quantity-button"
-                    onClick={() => dispatch(incrementQuantity(item.id))}>
-                    +
-                </button>
-            </div>
-            <div className="col-md-3 col-lg-2 p-0">
-                <h6 className="mb-0">{price * quantity}.00 сом</h6>
-            </div>
-            <div className="col-md-1 col-lg-1 col-xl-1 text-end">
-                <button onClick={() => dispatch(removeItem(item.id))} className='cart-trash'><IoIosCloseCircleOutline /></button>
-            </div>
-        </div>
-    )
-}
+                <div className="cart-item-card__controls">
+                    <div className="cart-item-quantity">
+                        <button
+                            type="button"
+                            onClick={() => dispatch(decrementQuantity(item.id))}
+                        >
+                            -
+                        </button>
 
-export default CartItem
+                        <span>{quantity}</span>
+
+                        <button
+                            type="button"
+                            onClick={() => dispatch(incrementQuantity(item.id))}
+                        >
+                            +
+                        </button>
+                    </div>
+
+                    <div className="cart-item-card__price">
+                        {price * quantity}.00 сом
+                    </div>
+
+                    <button
+                        type="button"
+                        className="cart-item-card__remove"
+                        onClick={() => dispatch(removeItem(item.id))}
+                        aria-label="Удалить товар"
+                    >
+                        <IoIosCloseCircleOutline />
+                    </button>
+                </div>
+            </div>
+        </article>
+    );
+};
+
+export default CartItem;

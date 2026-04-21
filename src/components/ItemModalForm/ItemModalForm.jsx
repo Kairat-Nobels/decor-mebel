@@ -67,7 +67,7 @@ const ItemModalForm = ({ open, onClose, itemData }) => {
           )}
 
           <Uploader
-            action="https://a966685f5a33544c.mokky.dev/uploads"
+            action="https://acee0a61d9a543aa.mokky.dev/uploads"
             name="file"
             autoUpload
             style={{ marginTop: '15px' }}

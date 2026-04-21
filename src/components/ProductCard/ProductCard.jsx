@@ -1,33 +1,62 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import "./productCard.scss";
-import { HiShoppingCart } from "react-icons/hi";
-import { FaEye } from "react-icons/fa";
+import './productCard.scss';
+import { HiShoppingCart } from 'react-icons/hi';
+import { FaEye } from 'react-icons/fa';
 import { useDispatch } from 'react-redux';
 import { addToCart } from '../../store/features/cartSlice';
 
-const ProductCard = (props) => {
-    const { image, title, category, price, oldPrice, item } = props;
+const ProductCard = ({ image, title, category, price, oldPrice, item }) => {
     const dispatch = useDispatch();
+
+    const handleAddToCart = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        dispatch(addToCart(item));
+    };
+
     return (
-        <div data-aos="fade-up" className="product-card pb-5 d-flex flex-column col-12 col-md-4 col-lg-3">
-            <div className="product-image mb-1">
-                <Link to={`/shop/${item.id}`}><img src={image} alt="product" /></Link>
-            </div>
-            <div className="product-info px-3 d-flex flex-column">
-                <span className='product-category'>{category}</span>
-                <h3><Link to="/">{title}</Link ></h3>
-                <div className="product-prices d-flex">
-                    {oldPrice ? (<><del className='product-price pe-2'>{oldPrice}.00 сом</del><span className='product-price'>{price}.00 сом</span></>) : (<span className='product-price'>{price}.00 сом</span>)}
+        <article className="product-card">
+            <Link to={`/shop/${item.id}`} className="product-card__image">
+                <img src={image} alt={title} />
+                {oldPrice && <span className="product-card__badge">Акция</span>}
+            </Link>
+
+            <div className="product-card__content">
+                <span className="product-card__category">{category}</span>
+
+                <h3 className="product-card__title">
+                    <Link to={`/shop/${item.id}`}>{title}</Link>
+                </h3>
+
+                <div className="product-card__prices">
+                    {oldPrice ? (
+                        <>
+                            <del>{oldPrice}.00 сом</del>
+                            <span>{price}.00 сом</span>
+                        </>
+                    ) : (
+                        <span>{price}.00 сом</span>
+                    )}
+                </div>
+
+                <div className="product-card__actions">
+                    <button
+                        type="button"
+                        className="product-card__cart-btn"
+                        onClick={handleAddToCart}
+                    >
+                        <HiShoppingCart />
+                        <span>В корзину</span>
+                    </button>
+
+                    <Link to={`/shop/${item.id}`} className="product-card__view-btn">
+                        <FaEye />
+                    </Link>
                 </div>
             </div>
-            <div className="product-card-buttons d-flex flex-column">
-                <button onClick={() => { dispatch(addToCart(item)) }} className='add-cart'><HiShoppingCart /><span>Добавить в корзину</span></button>
-                <button className='quick-view'><FaEye /><span>Быстрый просмотр</span></button>
-            </div>
-            {oldPrice && <span className="product-sale">Акция!</span>}
-        </div>
-    )
-}
+        </article>
+    );
+};
 
 export default ProductCard;

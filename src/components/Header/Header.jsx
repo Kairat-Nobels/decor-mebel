@@ -7,9 +7,7 @@ import { GiHamburgerMenu } from "react-icons/gi";
 import { IoCloseSharp } from "react-icons/io5";
 import { HiOutlineSquares2X2 } from "react-icons/hi2";
 import { useDispatch, useSelector } from 'react-redux';
-import Connect from '../Connect/Connect';
 import Footer from '../Footer/Footer';
-import Contact from '../Contact/Contact';
 import { getOrders } from '../../store/slices/ordersSlice';
 import { getReviews } from '../../store/slices/reviewsSlice';
 import CameModal from '../CameModal/CameModal';
@@ -57,7 +55,7 @@ const Header = () => {
     };
 
     const handleAdminClick = () => {
-        if (localStorage.getItem('admin') === "true") {
+        if (localStorage.getItem('admin') === 'true') {
             navigate('/admin/orders');
         } else {
             setModal(true);
@@ -66,29 +64,34 @@ const Header = () => {
     };
 
     const navLinkClass = ({ isActive }) =>
-        isActive ? 'nav-link-item active' : 'nav-link-item';
+        isActive ? 'main-nav__link active' : 'main-nav__link';
 
     return (
         <>
             <header className="site-header">
-                <div className="topbar">
+                <div className="header-top-line">
                     <div className="page-container">
-                        <p>Стильная мебель для вашего дома</p>
+                        <p>Новая коллекция мебели для современного интерьера</p>
                     </div>
                 </div>
 
                 <div className="page-container">
-                    <div className="header-main">
-                        <div className="header-brand">
-                            <Link to="/" className="logo-link" aria-label="На главную">
-                                <img src={logo} alt="Mebel Decor" />
-                            </Link>
-                        </div>
+                    <div className="header-shell">
+                        <Link to="/" className="brand-block">
+                            <div className="brand-logo">
+                                <img src={logo} alt="Decor Mebel" />
+                            </div>
+                            <div className="brand-text">
+                                <span className="brand-title">Decor Mebel</span>
+                                <span className="brand-subtitle">уют, стиль, комфорт</span>
+                            </div>
+                        </Link>
 
-                        <nav className="desktop-nav" aria-label="Основная навигация">
+                        <nav className="main-nav">
                             <NavLink to="/" className={navLinkClass}>
                                 Главная
                             </NavLink>
+
                             <NavLink to="/shop" className={navLinkClass}>
                                 Магазин
                             </NavLink>
@@ -99,18 +102,18 @@ const Header = () => {
                                 onMouseLeave={() => setIsCatalogOpen(false)}
                             >
                                 <button
-                                    className="catalog-trigger"
                                     type="button"
+                                    className="catalog-dropdown__trigger"
                                     onClick={() => setIsCatalogOpen((prev) => !prev)}
                                 >
                                     <HiOutlineSquares2X2 />
-                                    Категории
+                                    <span>Категории</span>
                                 </button>
 
-                                <div className="catalog-menu">
+                                <div className="catalog-dropdown__menu">
                                     <button
                                         type="button"
-                                        className="catalog-item"
+                                        className="catalog-dropdown__item"
                                         onClick={() => changeCategory('All')}
                                     >
                                         Все товары
@@ -120,7 +123,7 @@ const Header = () => {
                                         <button
                                             key={category.id}
                                             type="button"
-                                            className="catalog-item"
+                                            className="catalog-dropdown__item"
                                             onClick={() => changeCategory(category.name)}
                                         >
                                             {category.name}
@@ -133,29 +136,29 @@ const Header = () => {
                         <div className="header-actions">
                             <button
                                 type="button"
-                                className="admin-button"
+                                className="admin-btn"
                                 onClick={handleAdminClick}
                             >
                                 Admin
                             </button>
 
-                            <Link to="/cart" className="cart-button" aria-label="Корзина">
-                                <div className="cart-icon-wrap">
+                            <Link to="/cart" className="cart-btn">
+                                <div className="cart-btn__icon">
                                     <HiShoppingCart />
                                     {totalQuantity > 0 && (
-                                        <span className="cart-count">{totalQuantity}</span>
+                                        <span className="cart-btn__count">{totalQuantity}</span>
                                     )}
                                 </div>
-                                <div className="cart-info">
-                                    <span className="cart-label">Корзина</span>
-                                    <span className="cart-price">{totalPrice}.00 сом</span>
+
+                                <div className="cart-btn__info">
+                                    <span className="cart-btn__label">Корзина</span>
+                                    <span className="cart-btn__price">{totalPrice}.00 сом</span>
                                 </div>
                             </Link>
 
                             <button
                                 type="button"
-                                className="mobile-menu-button"
-                                aria-label={isMenuOpen ? 'Закрыть меню' : 'Открыть меню'}
+                                className="burger-btn"
                                 onClick={() => setIsMenuOpen((prev) => !prev)}
                             >
                                 {isMenuOpen ? <IoCloseSharp /> : <GiHamburgerMenu />}
@@ -164,10 +167,10 @@ const Header = () => {
                     </div>
                 </div>
 
-                <div className={`mobile-menu ${isMenuOpen ? 'open' : ''}`}>
+                <div className={`mobile-panel ${isMenuOpen ? 'open' : ''}`}>
                     <div className="page-container">
-                        <div className="mobile-menu-content">
-                            <nav className="mobile-nav" aria-label="Мобильная навигация">
+                        <div className="mobile-panel__content">
+                            <nav className="mobile-nav">
                                 <NavLink
                                     to="/"
                                     className={navLinkClass}
@@ -186,11 +189,11 @@ const Header = () => {
                             </nav>
 
                             <div className="mobile-categories">
-                                <p className="mobile-title">Категории</p>
+                                <p className="mobile-categories__title">Категории</p>
 
                                 <button
                                     type="button"
-                                    className="mobile-category-btn"
+                                    className="mobile-categories__btn"
                                     onClick={() => changeCategory('All')}
                                 >
                                     Все товары
@@ -200,7 +203,7 @@ const Header = () => {
                                     <button
                                         key={category.id}
                                         type="button"
-                                        className="mobile-category-btn"
+                                        className="mobile-categories__btn"
                                         onClick={() => changeCategory(category.name)}
                                     >
                                         {category.name}
@@ -210,7 +213,7 @@ const Header = () => {
 
                             <button
                                 type="button"
-                                className="mobile-admin-button"
+                                className="mobile-admin-btn"
                                 onClick={handleAdminClick}
                             >
                                 Перейти в админку
@@ -226,8 +229,6 @@ const Header = () => {
                 <Outlet />
             </main>
 
-            <Connect />
-            <Contact />
             <Footer />
         </>
     );

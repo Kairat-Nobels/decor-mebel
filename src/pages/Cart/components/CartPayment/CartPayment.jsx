@@ -1,17 +1,17 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import CartItem from '../CartItem/CartItem';
-import { HiOutlineArrowNarrowLeft } from "react-icons/hi";
+import { HiOutlineArrowNarrowLeft, HiShoppingCart } from 'react-icons/hi';
+import { FaTag, FaCheckCircle } from 'react-icons/fa';
 import PaymentModal from '../PaymentModal/PaymentModal';
-import "./cartPayment.scss";
+import './cartPayment.scss';
 import { createOrder } from '../../../../store/slices/ordersSlice';
 
 const CartPayment = () => {
     const cart = useSelector((state) => state.cart.cart);
     const dispatch = useDispatch();
 
-    // Состояния для формы
     const [promo, setPromo] = useState('');
     const [promoApplied, setPromoApplied] = useState(false);
     const [name, setName] = useState('');
@@ -21,17 +21,20 @@ const CartPayment = () => {
     const [showModal, setShowModal] = useState(false);
     const [isValid, setIsValid] = useState(false);
 
-    // Скидка по промокоду
     const discount = promoApplied ? 0.2 : 0;
 
-    const getTotalQuantity = () => cart.reduce((sum, item) => sum + item.quantity, 0);
+    const getTotalQuantity = () =>
+        cart.reduce((sum, item) => sum + item.quantity, 0);
 
-    const getTotalPrice = () => cart.reduce((sum, item) => sum + Math.round(item.price) * item.quantity, 0);
+    const getTotalPrice = () =>
+        cart.reduce((sum, item) => sum + Math.round(item.price) * item.quantity, 0);
 
-    const getDiscountedPrice = () => Math.round(getTotalPrice() * (1 - discount));
+    const getDiscountedPrice = () =>
+        Math.round(getTotalPrice() * (1 - discount));
 
     const handlePromoApply = (e) => {
         e.preventDefault();
+
         if (promo.trim().toLowerCase() === 'grilish') {
             setPromoApplied(true);
         } else {
@@ -42,28 +45,30 @@ const CartPayment = () => {
 
     const handleCheckout = (e) => {
         e.preventDefault();
+
         if (!name || !phone || (delivery && !address)) {
             alert('Пожалуйста, заполните все поля');
             return;
         }
+
         if (!isValid) {
             alert('Неверный номер телефона');
             return;
         }
 
         const orderData = {
-            order: cart.map(item => ({
+            order: cart.map((item) => ({
                 id: item.id,
                 title: item.title,
                 quantity: item.quantity,
-                price: item.price
+                price: item.price,
             })),
             date: new Date().toISOString(),
             name,
             phone,
-            address: delivery ? address : "",
+            address: delivery ? address : '',
             amount: getDiscountedPrice(),
-            status: "Заказано"
+            status: 'Заказано',
         };
 
         dispatch(createOrder(orderData));
@@ -72,133 +77,211 @@ const CartPayment = () => {
 
     const handlePhoneNumberChange = (event) => {
         let input = event.target.value.replace(/\D/g, '');
+
         if (!/^(2\d{2}|5\d{2}|7\d{2}|9\d{2})\d{6}$/.test(input)) {
             setIsValid(false);
             setPhone(input);
             return;
         }
+
         input = input.replace(/^(\d{3})(\d{3})(\d{3})$/, '($1)-$2-$3');
         setIsValid(/^\(\d{3}\)-\d{3}-\d{3}$/.test(input));
         setPhone(input);
     };
 
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
     return (
-        <div className="cart-payment">
-            <div className="container py-5 h-100">
-                <div className="row d-flex justify-content-center align-items-center h-100">
-                    <div className="col-12">
-                        <div className="card card-registration card-registration-2" style={{ borderRadius: "15px" }}>
-                            <div className="card-body p-0">
-                                <div className="row g-0">
-                                    <div className="col-lg-8">
-                                        <div className="p-5">
-                                            <div className="cart-head d-flex justify-content-between align-items-center mb-5">
-                                                <h1 className="fw-bold mb-0 text-black">Корзина</h1>
-                                                <h6 className="mb-0 text-muted">{getTotalQuantity()} товаров</h6>
-                                            </div>
-                                            <div className={`cart-products ${cart.length === 0 ? "empty" : ""}`}>
-                                                {cart.length === 0 ? (
-                                                    <div className="text-center py-5">
-                                                        <h4>Корзина пуста</h4>
-                                                        <Link to="/shop" className="btn btn-primary mt-3">Перейти в магазин</Link>
-                                                    </div>
-                                                ) : (
-                                                    cart.map((item) => (
-                                                        <CartItem
-                                                            key={item.id}
-                                                            item={item}
-                                                            quantity={item.quantity}
-                                                            image={item.image}
-                                                            title={item.title}
-                                                            category={item.category}
-                                                            price={item.price}
-                                                        />
-                                                    ))
-                                                )}
-                                            </div>
-                                            <div className="pt-5 back-shop">
-                                                <h6 className="mb-0"><Link to="/shop"><HiOutlineArrowNarrowLeft />Вернуться в магазин</Link></h6>
-                                            </div>
-                                        </div>
+        <div className="cart-payment-page">
+            <div className="page-container">
+                <div className="cart-payment-page__back">
+                    <Link to="/shop">
+                        <HiOutlineArrowNarrowLeft />
+                        <span>Вернуться в магазин</span>
+                    </Link>
+                </div>
+
+                <div className="cart-payment-layout">
+                    <section className="cart-products-card">
+                        <div className="cart-products-card__head">
+                            <div>
+                                <div className="cart-page-badge">
+                                    <HiShoppingCart />
+                                    <span>Корзина</span>
+                                </div>
+                                <h1>Ваши товары</h1>
+                            </div>
+
+                            <div className="cart-products-card__count">
+                                {getTotalQuantity()} товаров
+                            </div>
+                        </div>
+
+                        {cart.length === 0 ? (
+                            <div className="cart-empty-state">
+                                <h3>Корзина пуста</h3>
+                                <p>Добавьте понравившиеся товары, чтобы оформить заказ.</p>
+                                <Link to="/shop" className="cart-empty-state__link">
+                                    Перейти в магазин
+                                </Link>
+                            </div>
+                        ) : (
+                            <div className="cart-products-list">
+                                {cart.map((item) => (
+                                    <CartItem
+                                        key={item.id}
+                                        item={item}
+                                        quantity={item.quantity}
+                                        image={item.image}
+                                        title={item.title}
+                                        category={item.category}
+                                        price={item.price}
+                                    />
+                                ))}
+                            </div>
+                        )}
+                    </section>
+
+                    <aside className="cart-summary-card">
+                        <div className="cart-summary-card__head">
+                            <h2>Оформление заказа</h2>
+                            <p>Заполните данные и перейдите к оплате</p>
+                        </div>
+
+                        {cart.length === 0 ? (
+                            <div className="cart-summary-empty">
+                                <p>Добавьте товары в корзину для оформления заказа</p>
+                            </div>
+                        ) : (
+                            <form className="checkout-form" onSubmit={handleCheckout}>
+                                <div className="checkout-form__group">
+                                    <label>Имя</label>
+                                    <input
+                                        type="text"
+                                        value={name}
+                                        onChange={(e) => setName(e.target.value)}
+                                        placeholder="Введите имя"
+                                        required
+                                    />
+                                </div>
+
+                                <div className="checkout-form__group">
+                                    <label>Телефон</label>
+                                    <input
+                                        type="tel"
+                                        value={phone}
+                                        onChange={handlePhoneNumberChange}
+                                        placeholder="Например: (700)-123-456"
+                                        required
+                                    />
+                                    {!isValid && phone.length > 0 && (
+                                        <span className="checkout-form__error">
+                                            Неверный номер телефона
+                                        </span>
+                                    )}
+                                </div>
+
+                                <label className="checkout-checkbox">
+                                    <input
+                                        type="checkbox"
+                                        checked={delivery}
+                                        onChange={(e) => setDelivery(e.target.checked)}
+                                    />
+                                    <span>Нужна доставка</span>
+                                </label>
+
+                                {delivery && (
+                                    <div className="checkout-form__group">
+                                        <label>Адрес доставки</label>
+                                        <input
+                                            type="text"
+                                            value={address}
+                                            onChange={(e) => setAddress(e.target.value)}
+                                            placeholder="Введите адрес"
+                                            required={delivery}
+                                        />
                                     </div>
-                                    <div className="col-lg-4 bg-grey">
-                                        <div className="p-5">
-                                            <h3 className="fw-bold mb-5 mt-2 pt-1 cart-head" style={{ fontSize: "26px", textAlign: "center" }}>Оформление заказа</h3>
-                                            {cart.length === 0 ? (
-                                                <div className="text-center text-muted">Добавьте товары в корзину для оформления заказа</div>
-                                            ) : (
-                                                <form onSubmit={handleCheckout}>
-                                                    <div className="mb-3">
-                                                        <label className="form-label">Имя</label>
-                                                        <input type="text" className="form-control" value={name} onChange={e => setName(e.target.value)} required />
-                                                    </div>
-                                                    <div className="mb-3">
-                                                        <label className="form-label">Телефон</label>
-                                                        <input
-                                                            type="tel"
-                                                            className="form-control"
-                                                            value={phone}
-                                                            onChange={handlePhoneNumberChange}
-                                                            required
-                                                        />
-                                                        {!isValid && phone.length > 0 && (
-                                                            <div className="text-danger mt-1">Неверный номер телефона</div>
-                                                        )}
-                                                    </div>
-                                                    <div className="form-check mb-3">
-                                                        <input className="form-check-input" type="checkbox" checked={delivery} onChange={e => setDelivery(e.target.checked)} id="deliveryCheck" />
-                                                        <label className="form-check-label" htmlFor="deliveryCheck">
-                                                            Доставка
-                                                        </label>
-                                                    </div>
-                                                    {delivery && (
-                                                        <div className="mb-3">
-                                                            <label className="form-label">Адрес доставки</label>
-                                                            <input type="text" className="form-control" value={address} onChange={e => setAddress(e.target.value)} required={delivery} />
-                                                        </div>
-                                                    )}
-                                                    <div className="mb-3">
-                                                        <label className="form-label">Промокод</label>
-                                                        <div className="input-group">
-                                                            <input type="text" className="form-control" value={promo} onChange={e => setPromo(e.target.value)} disabled={promoApplied} />
-                                                            <button className="btn btn-outline-secondary" onClick={handlePromoApply} disabled={promoApplied}>Применить</button>
-                                                        </div>
-                                                        {promoApplied && <div className="text-success mt-1">Промокод применён! -20%</div>}
-                                                    </div>
-                                                    <div className="d-flex justify-content-between mb-3">
-                                                        <h5 className="text-uppercase">Итого</h5>
-                                                        <h5>
-                                                            {promoApplied && (
-                                                                <span style={{ textDecoration: 'line-through', color: '#888', marginRight: 8 }}>
-                                                                    {getTotalPrice()} сом
-                                                                </span>
-                                                            )}
-                                                            {getDiscountedPrice()} сом
-                                                        </h5>
-                                                    </div>
-                                                    <button
-                                                        type="submit"
-                                                        className="general-button w-100"
-                                                        disabled={
-                                                            !name ||
-                                                            !phone ||
-                                                            !isValid ||
-                                                            (delivery && !address)
-                                                        }
-                                                    >
-                                                        Перейти к оплате
-                                                    </button>
-                                                </form>
+                                )}
+
+                                <div className="promo-box">
+                                    <div className="promo-box__label">
+                                        <FaTag />
+                                        <span>Промокод</span>
+                                    </div>
+
+                                    <div className="promo-box__controls">
+                                        <input
+                                            type="text"
+                                            value={promo}
+                                            onChange={(e) => setPromo(e.target.value)}
+                                            placeholder="Введите промокод"
+                                            disabled={promoApplied}
+                                        />
+                                        <button
+                                            type="button"
+                                            onClick={handlePromoApply}
+                                            disabled={promoApplied}
+                                        >
+                                            Применить
+                                        </button>
+                                    </div>
+
+                                    {promoApplied && (
+                                        <div className="promo-box__success">
+                                            <FaCheckCircle />
+                                            <span>Промокод применён! Скидка 20%</span>
+                                        </div>
+                                    )}
+                                </div>
+
+                                <div className="summary-totals">
+                                    <div className="summary-row">
+                                        <span>Товаров</span>
+                                        <strong>{getTotalQuantity()}</strong>
+                                    </div>
+
+                                    <div className="summary-row">
+                                        <span>Сумма</span>
+                                        <strong>{getTotalPrice()} сом</strong>
+                                    </div>
+
+                                    {promoApplied && (
+                                        <div className="summary-row summary-row--discount">
+                                            <span>Скидка</span>
+                                            <strong>-20%</strong>
+                                        </div>
+                                    )}
+
+                                    <div className="summary-row summary-row--total">
+                                        <span>Итого</span>
+                                        <div className="summary-total-price">
+                                            {promoApplied && (
+                                                <del>{getTotalPrice()} сом</del>
                                             )}
+                                            <strong>{getDiscountedPrice()} сом</strong>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
+
+                                <button
+                                    type="submit"
+                                    className="checkout-submit-btn"
+                                    disabled={
+                                        !name ||
+                                        !phone ||
+                                        !isValid ||
+                                        (delivery && !address)
+                                    }
+                                >
+                                    Перейти к оплате
+                                </button>
+                            </form>
+                        )}
+                    </aside>
                 </div>
             </div>
-            {/* Модальное окно оплаты */}
+
             <PaymentModal
                 isOpen={showModal}
                 onClose={() => setShowModal(false)}
@@ -206,7 +289,7 @@ const CartPayment = () => {
                 discount={discount}
             />
         </div>
-    )
-}
+    );
+};
 
 export default CartPayment;

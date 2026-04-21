@@ -1,82 +1,247 @@
 @import 'rsuite/dist/rsuite.min.css';
 
+.wrapper {
+  min-height: 100vh;
+  padding: 30px 0 50px;
+  background:
+    radial-gradient(circle at top left, rgba(120, 101, 255, 0.1), transparent 24%),
+    radial-gradient(circle at top right, rgba(89, 198, 255, 0.12), transparent 28%),
+    linear-gradient(180deg, #f6f8ff 0%, #eef4ff 100%);
+}
+
+.shell {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
 .header {
   display: flex;
   justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+  padding: 28px;
+  border-radius: 30px;
+  background: rgba(255, 255, 255, 0.86);
+  border: 1px solid rgba(111, 97, 255, 0.08);
+  box-shadow: 0 20px 46px rgba(92, 101, 182, 0.1);
+}
+
+.headerInfo {
+  max-width: 700px;
+}
+
+.badge {
+  display: inline-flex;
   align-items: center;
-  margin: 20px 0 30px;
+  justify-content: center;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: rgba(111, 97, 255, 0.1);
+  color: #5d52d6;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.headerInfo h1 {
+  margin: 14px 0 10px;
+  font-size: 48px;
+  line-height: 1.05;
+  font-weight: 900;
+  color: #20265f;
+}
+
+.headerInfo p {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.75;
+  color: #6b75a6;
+}
+
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.primaryButton,
+.secondaryButton {
+  min-height: 52px;
+  padding: 0 20px;
+  border: none;
+  border-radius: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-size: 15px;
+  font-weight: 700;
+  transition: 0.25s ease;
+}
+
+.primaryButton svg,
+.secondaryButton svg {
+  width: 18px;
+  height: 18px;
+}
+
+.primaryButton {
+  background: linear-gradient(135deg, #6f61ff 0%, #59c6ff 100%);
+  color: #ffffff;
+  box-shadow: 0 18px 36px rgba(97, 105, 255, 0.22);
+}
+
+.primaryButton:hover {
+  transform: translateY(-2px);
+}
+
+.secondaryButton {
+  background: rgba(111, 97, 255, 0.08);
+  color: #5649dc;
+}
+
+.secondaryButton:hover {
+  background: rgba(111, 97, 255, 0.16);
 }
 
 .navbar {
   display: flex;
   align-items: center;
-  gap: 30px;
-  margin-bottom: 20px;
+  gap: 14px;
+  flex-wrap: wrap;
+  padding: 18px;
+  border-radius: 26px;
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid rgba(111, 97, 255, 0.08);
+  box-shadow: 0 14px 34px rgba(90, 102, 180, 0.07);
 }
 
-.navbar ul {
-  list-style-type: none;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 30px;
-}
-
-.navbar a {
-  padding: 8px 30px;
-  color: #78909c;
-  background-color: transparent;
-  border: 2px solid#78909c;
+.navLink {
+  text-decoration: none;
+  padding: 14px 22px;
+  border-radius: 16px;
+  background: #f7f8ff;
+  color: #59639e;
   font-size: 15px;
-  font-weight: 600;
-  width: fit-content;
-  text-decoration: none;
-  font-size: 18px;
-  line-height: 22px;
-  position: relative;
+  font-weight: 700;
+  transition: 0.25s ease;
 }
 
-.navbar a:hover {
-  font-weight: 600;
+.navLink:hover {
+  color: #4d56a4;
+  background: #eef1ff;
   text-decoration: none;
-  color: white;
-  color: #78909c;
 }
 
-.navbar .active {
-  font-size: 20px;
-  font-weight: 600;
+.active {
+  background: linear-gradient(135deg, #6f61ff 0%, #59c6ff 100%);
   color: #ffffff;
-  position: relative;
-  background: #78909c;
-  border-radius: 5px;
-  text-decoration: none;
+  box-shadow: 0 14px 30px rgba(96, 104, 255, 0.2);
 }
 
-.navbar a:hover::after {
-  position: absolute;
-  top: 30px;
-  content: '';
-  height: 3px;
-  border-radius: 5px;
-  left: 10%;
-  width: 80%;
-  background: #78909c;
-}
-
-.navbar .active:hover {
-  transform: none;
-  background: #78909c;
-  border-radius: 10px;
+.active:hover {
   color: #ffffff;
-  text-decoration: none;
-}
-
-.navbar .active:hover::after {
-  display: none;
+  background: linear-gradient(135deg, #6f61ff 0%, #59c6ff 100%);
 }
 
 .content {
   margin-bottom: 20px;
-  padding-bottom: 40px;
+  padding: 26px;
+  border-radius: 30px;
+  background: rgba(255, 255, 255, 0.78);
+  border: 1px solid rgba(111, 97, 255, 0.08);
+  box-shadow: 0 18px 42px rgba(94, 103, 185, 0.08);
+}
+
+.notWelcome {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background:
+    radial-gradient(circle at top left, rgba(120, 101, 255, 0.1), transparent 24%),
+    radial-gradient(circle at top right, rgba(89, 198, 255, 0.12), transparent 28%),
+    linear-gradient(180deg, #f6f8ff 0%, #eef4ff 100%);
+}
+
+.notWelcomeCard {
+  width: 100%;
+  max-width: 520px;
+  padding: 34px 28px;
+  border-radius: 28px;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(111, 97, 255, 0.08);
+  box-shadow: 0 20px 46px rgba(92, 101, 182, 0.1);
+}
+
+.notWelcomeCard h2 {
+  margin-bottom: 20px;
+  color: #20265f;
+}
+
+@media (max-width: 992px) {
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .headerInfo h1 {
+    font-size: 38px;
+  }
+
+  .content {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .wrapper {
+    padding: 20px 0 40px;
+  }
+
+  .header {
+    padding: 22px;
+    border-radius: 24px;
+  }
+
+  .headerInfo h1 {
+    font-size: 32px;
+  }
+
+  .headerInfo p {
+    font-size: 15px;
+  }
+
+  .navbar {
+    padding: 14px;
+    border-radius: 22px;
+  }
+
+  .navLink {
+    width: 100%;
+    text-align: center;
+  }
+
+  .content {
+    padding: 16px;
+    border-radius: 24px;
+  }
+}
+
+@media (max-width: 576px) {
+  .headerActions {
+    width: 100%;
+  }
+
+  .primaryButton,
+  .secondaryButton {
+    width: 100%;
+  }
+
+  .headerInfo h1 {
+    font-size: 28px;
+  }
 }

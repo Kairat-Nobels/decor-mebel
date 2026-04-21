@@ -1,9 +1,11 @@
 import React from "react";
 import { Modal } from "rsuite";
 import { FaWhatsapp } from "react-icons/fa";
-import payment from "../../../../assets/images/payment2.png";
+import { HiOutlineShieldCheck } from "react-icons/hi";
+import payment from "../../../../assets/images/payment.jpeg";
 import { useSelector } from "react-redux";
 import "rsuite/dist/rsuite.min.css";
+import "./paymentModal.scss";
 
 const PaymentModal = ({ isOpen, onClose, promoApplied, discount }) => {
   const cart = useSelector((state) => state.cart.cart);
@@ -13,6 +15,7 @@ const PaymentModal = ({ isOpen, onClose, promoApplied, discount }) => {
       (sum, item) => sum + Math.round(item.price) * item.quantity,
       0
     );
+
   const discountedPrice = Math.round(getTotalPrice() * (1 - (discount || 0)));
 
   const orderText =
@@ -23,73 +26,50 @@ const PaymentModal = ({ isOpen, onClose, promoApplied, discount }) => {
           `${idx + 1}) ${item.title} — ${item.quantity} шт. (${item.price} сом)`
       )
       .join("\n") +
-    `\n\nИтого: ${discountedPrice} сом${promoApplied ? " (со скидкой 20%)" : ""}`;
+    `\n\nИтого: ${discountedPrice} сом${promoApplied ? " (со скидкой 20%)" : ""
+    }`;
 
-
-  const whatsappLink = `https://wa.me/996700762347?text=${encodeURIComponent(
+  const whatsappLink = `https://wa.me/996709317635?text=${encodeURIComponent(
     orderText
   )}`;
 
   return (
-    <Modal open={isOpen} onClose={onClose} size="xs">
+    <Modal open={isOpen} onClose={onClose} size="sm" className="payment-modal">
       <Modal.Header>
-        <Modal.Title
-          style={{
-            fontWeight: 600,
-            fontSize: 24,
-            textAlign: "center",
-          }}
-        >
-          Оплата
+        <Modal.Title>
+          <div className="payment-modal__title-wrap">
+            <h3>Завершите оплату</h3>
+          </div>
         </Modal.Title>
       </Modal.Header>
+
       <Modal.Body>
-        <p
-          style={{
-            marginBottom: 12,
-            color: "#444",
-            textAlign: "center",
-          }}
-        >
-          Произведите оплату по этим реквизитам и отправьте чек на WhatsApp
-        </p>
-        <img
-          src={payment}
-          alt="Реквизиты для оплаты"
-          style={{
-            width: "100%",
-            maxWidth: 300,
-            maxHeight: 370,
-            borderRadius: 10,
-            border: "1px solid #eee",
-            margin: "0 auto",
-            display: "block",
-          }}
-        />
+        <div className="payment-modal__body">
+
+
+          <div className="payment-modal__image-wrap">
+            <img src={payment} alt="Реквизиты для оплаты" />
+          </div>
+
+          <div className="payment-modal__notice">
+            <HiOutlineShieldCheck />
+            <span>После отправки чека менеджер подтвердит ваш заказ.</span>
+          </div>
+        </div>
       </Modal.Body>
+
       <Modal.Footer>
-        <a
-          href={whatsappLink}
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: 12,
-            background: "#22c55e",
-            color: "#fff",
-            fontWeight: 500,
-            fontSize: 18,
-            padding: "12px 0",
-            borderRadius: 8,
-            textDecoration: "none",
-            marginTop: 8,
-          }}
-        >
-          <FaWhatsapp style={{ fontSize: 32 }} />
-          <span>Отправить чек</span>
-        </a>
+        <div className="payment-modal__footer">
+          <a
+            href={whatsappLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="payment-modal__whatsapp"
+          >
+            <FaWhatsapp />
+            <span>Отправить чек в WhatsApp</span>
+          </a>
+        </div>
       </Modal.Footer>
     </Modal>
   );
